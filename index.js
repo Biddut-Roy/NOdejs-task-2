@@ -55,7 +55,23 @@ app.post('/posts/:id/like', (req, res) => {
     res.json(post);
 });
 
-
+// Add a comment to a post by Id
+app.post('/posts/:id/comments', (req, res) => {
+    const postId = parseInt(req.params.id);
+    const post = posts.find(post => post.id === postId);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+    const { text } = req.body;
+    if (!text) {
+      return res.status(400).json({ message: 'Text is required' });
+    }
+    const newComment = {
+      text
+    };
+    post.comments.push(newComment);
+    res.status(201).json(post.comments);
+  });
 
 
 
