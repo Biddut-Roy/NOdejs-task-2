@@ -21,28 +21,40 @@ app.get('/posts/:id', (req, res) => {
     const postId = parseInt(req.params.id);
     const post = posts.find(post => post.id === postId);
     if (!post) {
-      return res.status(404).json({ message: 'Post not found' });
+        return res.status(404).json({ message: 'Post not found' });
     }
     res.json(post);
-  });
+});
 
 
 // Create a new post
 app.post('/posts', (req, res) => {
     const { text } = req.body;
     if (!text) {
-      return res.status(400).json({ message: 'Text is required' });
+        return res.status(400).json({ message: 'Text is required' });
     }
     const newPost = {
-      id: posts.length + 1,
-      text,
-      likes: 0,
-      comments: []
+        id: posts.length + 1,
+        text,
+        likes: 0,
+        comments: []
     };
     posts.push(newPost);
     res.status(201).json(newPost);
-  });
-  
+});
+
+
+// Like a post by ID
+app.post('/posts/:id/like', (req, res) => {
+    const postId = parseInt(req.params.id);
+    const post = posts.find(post => post.id === postId);
+    if (!post) {
+        return res.status(404).json({ message: 'Post not found' });
+    }
+    post.likes++;
+    res.json(post);
+});
+
 
 
 
